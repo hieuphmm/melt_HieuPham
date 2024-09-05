@@ -1,11 +1,29 @@
+"""
+Module for generating evaluations and saving results.
+
+This module defines the `generation` function, which processes a dataset,
+evaluates it using a pipeline, and saves the results to JSON files.
+"""
+
 import os
+from torch.utils.data import DataLoader
 from .tools.data import DatasetWrapper
 from .tools.pipelines import EvalPipeline
 from .tools.utils.utils import save_to_json, set_seed, read_json
-from torch.utils.data import DataLoader
 
 
 def generation(script_args):
+    """
+    Generate evaluations based on script arguments.
+
+    Args:
+        script_args: An object containing various script arguments, including 
+                     seed, dataset name, model name, and output directories.
+
+    This function sets the seed for reproducibility, loads the dataset, 
+    prepares for evaluation, and runs the evaluation pipeline. Results are 
+    saved to JSON files in the specified output directories.
+    """
     set_seed(script_args.seed)
 
     # Load dataset (you can process it here)
@@ -65,6 +83,14 @@ def generation(script_args):
 
     # Evaluate
     def save_results(generations, metrics=None):
+        """
+        Save the generation results and metrics to JSON files.
+
+        Args:
+            generations: The generated results to be saved.
+            metrics: Optional metrics to be saved. If not provided, only
+                     generations are saved.
+        """
         save_to_json(generations, json_file)
         if metrics is not None:
             save_to_json(metrics, metric_file)
